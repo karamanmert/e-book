@@ -58,10 +58,18 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // todo return dto SSİL
+    @GetMapping("/paginate")
+    public ResponseEntity<Page<Book>> getPagindatedBooks(@RequestParam Integer page,
+                                                        @RequestParam Integer pageSize) {
+        Page<Book> books = businessService.getAllPaginatedBooks(page, pageSize);
+        return ResponseEntity.status(HttpStatus.OK).body(books);
+    }
+
     // todo return dto
     @GetMapping("/paginate")
-    private ResponseEntity<Page<Book>> getPaginatedBooks(@RequestParam Integer page,
-                                                         @RequestParam Integer pageSize) {
+    public ResponseEntity<Page<Book>> getPaginatedBooks(@RequestParam Integer page,
+                                                        @RequestParam Integer pageSize) {
         Page<Book> books = businessService.getAllPaginatedBooks(page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(books);
     }
