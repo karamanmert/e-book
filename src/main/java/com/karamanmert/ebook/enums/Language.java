@@ -6,6 +6,6 @@ package com.karamanmert.ebook.enums;
 public enum Language {
 
     TR,
-    ENG,
+    EN,
     RS
 }

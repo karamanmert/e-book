@@ -1,6 +1,8 @@
 package com.karamanmert.ebook.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,8 +27,13 @@ public class CreateBookRequest {
     private Integer edition;
 
     @JsonProperty("type")
+    @Enumerated(EnumType.STRING)
     private String type;
 
     @JsonProperty("author_id")
     private Long authorId;
+
+    @JsonProperty("language")
+    @Enumerated(EnumType.STRING)
+    private String language;
 }

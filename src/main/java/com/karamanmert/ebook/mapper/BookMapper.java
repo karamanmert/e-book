@@ -14,7 +14,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
     @Mapping(target = "author.id", source = "request.authorId")
-    @Mapping(target = "language", constant = "TR")
+    @Mapping(target = "language", source = "request.language")
     Book requestToEntity(CreateBookRequest request);
 
     @Mapping(target = "authorName", expression = "java(book.getAuthor().getName() + ' ' + book.getAuthor().getSurname())")

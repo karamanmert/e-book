@@ -73,4 +73,9 @@ public class BookBusinessService {
         return new PageImpl<>(content, pageRequest, content.size());
          */
     }
+
+    public BookDto getByIsbn(String isbn) {
+        Book book = service.getByIsbn(isbn);
+        return bookMapper.entityToDto(book);
+    }
 }
