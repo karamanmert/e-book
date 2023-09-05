@@ -58,6 +58,13 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // TODO SİLLL
+    @GetMapping("dene sil")
+    public ResponseEntity<Void> updated(@Valid @RequestBody UpdateBookRequest request) {
+        businessService.update(request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     // todo return dto
     @GetMapping("/paginate")
     private ResponseEntity<Page<Book>> getPaginatedBooks(@RequestParam Integer page,
