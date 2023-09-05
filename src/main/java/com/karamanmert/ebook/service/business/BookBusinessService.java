@@ -63,8 +63,14 @@ public class BookBusinessService {
     }
 
 
-    public Page<Book> getAllPaginatedBooks(int page, int pageSize) {
+    public Page<BookDto> getAllPaginatedBooks(int page, int pageSize) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        return service.getPaginatedBooks(pageRequest);
+        Page<Book> paginatedBooks = service.getPaginatedBooks(pageRequest);
+        return paginatedBooks.map(this.bookMapper::entityToDto);
+
+        /*
+        List<BookDto> content = service.getPaginatedBooks(pageRequest).stream().map(this.bookMapper::entityToDto).toList();
+        return new PageImpl<>(content, pageRequest, content.size());
+         */
     }
 }

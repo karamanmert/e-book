@@ -1,6 +1,5 @@
 package com.karamanmert.ebook.controller;
 
-import com.karamanmert.ebook.entity.Book;
 import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateBookRequest;
 import com.karamanmert.ebook.model.request.UpdateBookRequest;
@@ -58,11 +57,10 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // todo return dto
     @GetMapping("/paginate")
-    public ResponseEntity<Page<Book>> getPaginatedBooks(@RequestParam Integer page,
-                                                        @RequestParam Integer pageSize) {
-        Page<Book> books = businessService.getAllPaginatedBooks(page, pageSize);
+    public ResponseEntity<Page<BookDto>> getPaginatedBooks(@RequestParam Integer page,
+                                                           @RequestParam Integer pageSize) {
+        Page<BookDto> books = businessService.getAllPaginatedBooks(page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(books);
     }
 }
