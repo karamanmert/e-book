@@ -53,6 +53,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return ResponseEntity.status(ae.getHttpStatus()).body(response);
     }
 
+    /*
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex) {
@@ -62,6 +63,8 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         });
         return errorMap;
     }
+    */
+
     /*
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
