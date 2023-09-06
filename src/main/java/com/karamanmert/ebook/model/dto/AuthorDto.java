@@ -15,23 +15,14 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class AuthorDto {
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("release_date")
-    private LocalDate releaseDate;
+    @JsonProperty("surname")
+    private String surname;
 
-    @JsonProperty("edition")
-    private int edition;
-
-    @JsonProperty("type")
-    private String type;
-
-    @JsonProperty("language")
-    private String language;
-
-    @JsonProperty("author_name")
-    private String authorName;
+    @JsonProperty("date_of_birth")
+    private LocalDate dateOfBirth;
 }

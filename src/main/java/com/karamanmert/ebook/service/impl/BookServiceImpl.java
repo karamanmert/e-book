@@ -62,7 +62,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void checkBookExistsById(int id) {
-        repository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND));
+        repository.findById(id)
+                  .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND));
     }
 
     @Override

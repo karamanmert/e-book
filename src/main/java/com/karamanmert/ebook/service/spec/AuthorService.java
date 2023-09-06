@@ -10,4 +10,6 @@ public interface AuthorService {
     void checkByNameAndSurname(String name, String surname);
 
     void save(Author request);
+
+    Author findByBookIsbn(String isbn);
 }

@@ -1,32 +1,19 @@
 package com.karamanmert.ebook.exception.handler;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.exception.ErrorDetail;
 import com.karamanmert.ebook.exception.ErrorResponse;
 import com.karamanmert.ebook.service.impl.MessageTranslator;
-import io.micrometer.common.util.StringUtils;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 @Slf4j

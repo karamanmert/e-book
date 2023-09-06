@@ -12,7 +12,7 @@ public class ApiException extends RuntimeException {
     private final int httpStatus;
     private final ErrorCode errorCode;
     private final String body;
-    private final Map<String, Object> details;
+    private final transient Map<String, Object> details;
 
     public ApiException(ErrorCode errorCode) {
         super(errorCode.name());

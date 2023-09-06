@@ -1,7 +1,6 @@
 package com.karamanmert.ebook.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;

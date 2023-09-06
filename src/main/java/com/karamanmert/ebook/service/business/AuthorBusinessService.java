@@ -1,17 +1,12 @@
 package com.karamanmert.ebook.service.business;
 
 import com.karamanmert.ebook.entity.Author;
-import com.karamanmert.ebook.enums.ErrorCode;
-import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.mapper.AuthorMapper;
+import com.karamanmert.ebook.model.dto.AuthorDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import javax.swing.plaf.PanelUI;
 
 /**
  * @author karamanmert
@@ -27,6 +22,12 @@ public class AuthorBusinessService {
         authorService.checkByNameAndSurname(request.getName(), request.getSurname());
         var author = this.buildAuthor(request);
         authorService.save(author);
+    }
+
+    // TODO -> Dto will be change
+    public AuthorDto findByBookIsbn(String isbn) {
+        Author author = authorService.findByBookIsbn(isbn);
+        return authorMapper.mapEntityToDto(author);
     }
 
 

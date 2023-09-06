@@ -1,6 +1,7 @@
 package com.karamanmert.ebook.service.impl;
 
 import com.karamanmert.ebook.entity.Author;
+import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
@@ -41,10 +42,10 @@ class AuthorServiceImplTest {
 
     @Test
     void shouldThrowExceptionWhenThereIsAuthorByNameAndSurnameExists() {
-        // When
+        // Given
         when(repository.findByNameAndSurname(anyString(), anyString())).thenReturn(Optional.of(new Author()));
 
-        // Given
+        // When
         ApiException exception = assertThrows(ApiException.class,
                                                  () -> authorServiceImpl.checkByNameAndSurname(anyString(), anyString()));
 
@@ -54,13 +55,39 @@ class AuthorServiceImplTest {
 
     @Test
     void shouldCheckByNameAndSurname() {
-        // When
+        // Given
         when(repository.findByNameAndSurname(anyString(), anyString())).thenReturn(Optional.empty());
 
-        // Given
+        // When
         authorServiceImpl.checkByNameAndSurname(anyString(), anyString());
 
         // Then
         verify(repository).findByNameAndSurname(anyString(), anyString());
+    }
+
+    @Test
+    void shouldFindByBookIsbn() {
+        // Given
+        when(repository.findByBookIsbn(anyString())).thenReturn(Optional.of(new Author()));
+
+        // When
+        authorServiceImpl.findByBookIsbn(anyString());
+
+        // Then
+        verify(repository).findByBookIsbn(anyString());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToFindByBookIsbn() {
+        // Given
+        when(repository.findByBookIsbn(anyString())).thenReturn(Optional.empty());
+
+        // When
+        ApiException exception = assertThrows(ApiException.class,
+                                              () -> authorServiceImpl.findByBookIsbn(anyString()));
+
+        // Then
+        verify(repository).findByBookIsbn(anyString());
+        assertEquals(ErrorCode.ISBN_NOT_FOUND, exception.getErrorCode());
     }
 }

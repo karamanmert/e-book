@@ -1,6 +1,7 @@
 package com.karamanmert.ebook.mapper;
 
 import com.karamanmert.ebook.entity.Author;
+import com.karamanmert.ebook.model.dto.AuthorDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,4 +13,7 @@ import org.mapstruct.Mapping;
 public interface AuthorMapper {
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
     Author mapToEntity(CreateAuthorRequest request);
+
+    @Mapping(target = "author.books", ignore = true)
+    AuthorDto mapEntityToDto(Author author);
 }

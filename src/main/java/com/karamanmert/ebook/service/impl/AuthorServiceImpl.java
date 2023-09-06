@@ -32,4 +32,10 @@ public class AuthorServiceImpl implements AuthorService {
     public void save(Author author) {
         repository.save(author);
     }
+
+    @Override
+    public Author findByBookIsbn(String isbn) {
+        return repository.findByBookIsbn(isbn)
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.ISBN_NOT_FOUND));
+    }
 }
