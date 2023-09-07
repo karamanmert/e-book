@@ -28,7 +28,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     void deleteById(int id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM book WHERE id =:id")
-    Optional<Integer> findById(int id);
+    Optional<Book> findById(int id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM book WHERE isbn =:isbn")
     Optional<Book> findByIsbn(String isbn);

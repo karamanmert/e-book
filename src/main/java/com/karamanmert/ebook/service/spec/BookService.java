@@ -19,7 +19,7 @@ public interface BookService {
 
     void deleteById(int id);
 
-    Integer getById(int id);
+    Book getById(int id);
 
     void checkBookExistsById(int id);
 

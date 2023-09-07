@@ -6,13 +6,13 @@ import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.repository.BookRepository;
 import com.karamanmert.ebook.service.spec.BookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -20,6 +20,7 @@ import java.util.Random;
  */
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class BookServiceImpl implements BookService {
 
     private static final int ISBN_SIZE = 13;
@@ -40,11 +41,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll() {
-        return Optional
-                .ofNullable(repository.findAll())
-                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND))
-                .stream()
-                .toList();
+        List<Book> books = repository.findAll();
+        if (books.isEmpty()) {
+            log.info("There is no book in database!");
+            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND);
+        }
+        return books;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Integer getById(int id) {
+    public Book getById(int id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND));
