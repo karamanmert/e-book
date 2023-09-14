@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author karamanmert
  */
@@ -23,7 +25,7 @@ public class AuthorController {
 
     @PostMapping
     @Operation(summary = "Create an author")
-    public ResponseEntity<Void> create(@RequestBody @Valid CreateAuthorRequest request) {
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateAuthorRequest request) {
         authorBusinessService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -33,6 +35,13 @@ public class AuthorController {
     public ResponseEntity<AuthorDto> getByBookIsbn(
             @Valid @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "isbn") String isbn) {
         AuthorDto response = authorBusinessService.findByBookIsbn(isbn);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Get all authors")
+    public ResponseEntity<List<AuthorDto>> getAll() {
+        List<AuthorDto> response = authorBusinessService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

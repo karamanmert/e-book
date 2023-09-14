@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,5 +38,10 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findByBookIsbn(String isbn) {
         return repository.findByBookIsbn(isbn)
                 .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.ISBN_NOT_FOUND));
+    }
+
+    @Override
+    public List<Author> findAll() {
+        return repository.findAll();
     }
 }

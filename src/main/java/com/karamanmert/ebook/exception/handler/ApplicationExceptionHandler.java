@@ -4,21 +4,23 @@ import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.exception.ErrorDetail;
 import com.karamanmert.ebook.exception.ErrorResponse;
 import com.karamanmert.ebook.service.impl.MessageTranslator;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@ControllerAdvice
-@Slf4j
+@RestControllerAdvice
 @RequiredArgsConstructor
-public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApplicationExceptionHandler {
 
     private final MessageTranslator messageTranslator;
 
@@ -40,80 +42,12 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return ResponseEntity.status(ae.getHttpStatus()).body(response);
     }
 
-    /*
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    public ResponseEntity<Map<String, String>> handleInvalidArgument(@NonNull MethodArgumentNotValidException ex) {
         Map<String, String> errorMap = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        });
-        return errorMap;
+        ex.getBindingResult()
+          .getFieldErrors()
+          .forEach(error -> errorMap.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
     }
-    */
-
-    /*
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
-                                                                  @NonNull HttpHeaders headers,
-                                                                  @NonNull HttpStatusCode status,
-                                                                  @NonNull WebRequest request) {
-        return getErrorResponseFromMethodArgumentNotValid(ex);
-    }
-
-    private ResponseEntity<Object> getErrorResponseFromMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        List<FieldError> errorList = ex.getBindingResult().getFieldErrors();
-        List<ErrorDetail> errorDetailList = new ArrayList<>();
-        if (!errorList.isEmpty()) {
-            errorDetailList = errorList
-                    .stream()
-                    .map(error -> ErrorDetail
-                            .builder()
-                            .errorCode(ErrorCode.toEnum(error.getDefaultMessage()))
-                            .message(messageTranslator.getMessage(errorPrefix + error.getDefaultMessage()))
-                            .argument(error.getField())
-                            .build())
-                    .collect(toList());
-        } else {
-            String defaultMessage = Objects.requireNonNull(ex
-                                                                   .getBindingResult()
-                                                                   .getAllErrors()
-                                                                   .get(0)
-                                                                   .getDefaultMessage());
-            if (StringUtils.isBlank(defaultMessage)) {
-                defaultMessage = ErrorCode.INVALID_REQUEST_BODY.name();
-            }
-            ErrorDetail errorDetail = ErrorDetail
-                    .builder()
-                    .errorCode(ErrorCode.toEnum(defaultMessage))
-                    .message(messageTranslator.getMessage(errorPrefix + defaultMessage))
-                    .argument("")
-                    .build();
-            errorDetailList.add(errorDetail);
-        }
-
-        for (ErrorDetail errorDetail : errorDetailList) {
-            List<Field> declaredFields = this.getAllDeclaredFields(ex.getParameter().getParameterType());
-            for (Field declaredField : declaredFields) {
-                if (errorDetail.getArgument().equals(declaredField.getName()) && declaredField.isAnnotationPresent(
-                        JsonProperty.class) && !declaredField.getAnnotation(JsonProperty.class).value().isEmpty()) {
-                    errorDetail.setArgument(declaredField.getAnnotation(JsonProperty.class).value());
-                }
-            }
-        }
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrors(errorDetailList);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-
-    private List<Field> getAllDeclaredFields(Class<?> clazz) {
-        if (Objects.isNull(clazz)) {
-            return Collections.emptyList();
-        }
-        List<Field> allDeclaredFields = new ArrayList<>(getAllDeclaredFields(clazz.getSuperclass()));
-        List<Field> declaredFields = Arrays.stream(clazz.getDeclaredFields()).toList();
-        allDeclaredFields.addAll(declaredFields);
-        return allDeclaredFields;
-    }
-     */
 }

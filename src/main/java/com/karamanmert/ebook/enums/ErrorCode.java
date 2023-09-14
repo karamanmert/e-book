@@ -10,7 +10,8 @@ public enum ErrorCode {
     INVALID_REQUEST_BODY,
     NO_ERROR_CODE_FOUND,
     DUBLICATE_AUTHOR,
-    BOOK_NOT_FOUND, ISBN_NOT_FOUND;
+    BOOK_NOT_FOUND,
+    ISBN_NOT_FOUND;
 
     public static ErrorCode toEnum(String value) {
         try {

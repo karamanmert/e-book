@@ -26,13 +26,13 @@ public class BookBusinessService {
     private final BookMapper bookMapper;
 
     public void create(CreateBookRequest request) {
-        Book book = this.buildBook(request);
+        final Book book = this.buildBook(request);
         book.setIsbn(service.generateISBN());
         service.save(book);
     }
 
     public BookDto getByName(String name) {
-        Book book = service.getByName(name);
+        final Book book = service.getByName(name);
         return this.buildBookDto(book);
     }
 
@@ -57,7 +57,7 @@ public class BookBusinessService {
     }
 
     public void update(UpdateBookRequest request) {
-        Book book = service.getByIsbn(request.getIsbn());
+        final Book book = service.getByIsbn(request.getIsbn());
         bookMapper.updateBookFromRequest(request, book);
         service.save(book);
     }
@@ -65,7 +65,7 @@ public class BookBusinessService {
 
     public Page<BookDto> getAllPaginatedBooks(int page, int pageSize) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        Page<Book> paginatedBooks = service.getPaginatedBooks(pageRequest);
+        final Page<Book> paginatedBooks = service.getPaginatedBooks(pageRequest);
         return paginatedBooks.map(this.bookMapper::entityToDto);
 
         /*
@@ -75,7 +75,7 @@ public class BookBusinessService {
     }
 
     public BookDto getByIsbn(String isbn) {
-        Book book = service.getByIsbn(isbn);
+        final Book book = service.getByIsbn(isbn);
         return bookMapper.entityToDto(book);
     }
 }

@@ -25,4 +25,7 @@ public class AuthorDto {
 
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
+
+    @JsonProperty("book")
+    private BookDto book;
 }

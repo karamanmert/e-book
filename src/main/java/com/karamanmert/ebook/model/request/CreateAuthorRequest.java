@@ -2,10 +2,9 @@ package com.karamanmert.ebook.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -16,9 +15,11 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateAuthorRequest {
 
 
+    @Size(min = 2, max = 10, message = "INVALID_NAME")
     @NotBlank(message = "PARAMETER_REQUIRED")
     @JsonProperty("name")
     private String name;

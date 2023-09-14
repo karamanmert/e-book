@@ -14,6 +14,5 @@ public interface AuthorMapper {
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
     Author mapToEntity(CreateAuthorRequest request);
 
-    @Mapping(target = "author.books", ignore = true)
     AuthorDto mapEntityToDto(Author author);
 }

@@ -11,9 +11,7 @@ import java.util.Set;
  * @author karamanmert
  */
 @Entity
-@Table(name = "author", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name", "surname"})
-})
+@Table(name = "author", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "surname"})})
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,5 +36,6 @@ public class Author {
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
+    @ToString.Exclude
     private Set<Book> books;
 }

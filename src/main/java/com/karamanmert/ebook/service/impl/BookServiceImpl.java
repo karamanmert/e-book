@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll() {
-        List<Book> books = repository.findAll();
+        final List<Book> books = repository.findAll();
         if (books.isEmpty()) {
             log.info("There is no book in database!");
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND);
