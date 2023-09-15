@@ -43,11 +43,13 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
-    public ResponseEntity<Map<String, String>> handleInvalidArgument(@NonNull MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleInvalidArgument(MethodArgumentNotValidException ex) {
         Map<String, String> errorMap = new HashMap<>();
-        ex.getBindingResult()
-          .getFieldErrors()
-          .forEach(error -> errorMap.put(error.getField(), error.getDefaultMessage()));
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
+            String errorMessage = messageTranslator.getMessage(errorPrefix + error.getDefaultMessage());
+            errorMap.put(fieldName, errorMessage);
+        });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
     }
 }
