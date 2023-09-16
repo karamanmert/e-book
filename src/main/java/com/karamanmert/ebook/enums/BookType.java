@@ -15,7 +15,6 @@ public enum BookType {
     FANTASY,
     BIOGRAPHY,
     SELF_HELP,
-    HISTORY,
     POETRY,
     CHILDREN,
 }
