@@ -34,11 +34,11 @@ public class AuthorBusinessService {
 
     public AuthorDto findByBookIsbn(String isbn) {
         final Author author = authorService.findByBookIsbn(isbn);
-        AuthorDto dto = new AuthorDto();
+        final AuthorDto dto = new AuthorDto();
         dto.setName(author.getName());
         dto.setSurname(author.getSurname());
         dto.setDateOfBirth(author.getDateOfBirth());
-        Optional<Book> firstBook = author.getBooks().stream().filter(book -> book.getIsbn().equals(isbn)).findFirst();
+        final Optional<Book> firstBook = author.getBooks().stream().filter(book -> book.getIsbn().equals(isbn)).findFirst();
         firstBook.ifPresent(book -> dto.setBooks(Collections.singleton(bookMapper.entityToDto(book))));
         return dto;
     }
@@ -48,15 +48,27 @@ public class AuthorBusinessService {
         if (authors.isEmpty()) {
             return List.of();
         }
-        return authorMapper.mapEntityToDto(authors);
+        List<AuthorDto> dtos = new ArrayList<>();
+        authors.forEach(author -> {
+            AuthorDto dto = new AuthorDto();
+            dto.setName(author.getName());
+            dto.setSurname(author.getSurname());
+            dto.setDateOfBirth(author.getDateOfBirth());
+            Set<BookDto> bookDtos = author.getBooks()
+                    .stream()
+                    .map(bookMapper::entityToDto)
+                    .collect(Collectors.toSet());
+            dto.setBooks(bookDtos);
+            dtos.add(dto);
+        });
+        return dtos;
     }
 
 
     public List<AuthorDto> findAllAuthorsWithBooks() {
-        List<AuthorInformationView> views = authorService.findAllAuthorsWithBooks();
-        List<AuthorDto> dtoList = new ArrayList<>();
-
-        for (AuthorInformationView view : views) {
+        final List<AuthorInformationView> views = authorService.findAllAuthorsWithBooks();
+        final List<AuthorDto> dtoList = new ArrayList<>();
+        views.forEach(view -> {
             AuthorDto dto = new AuthorDto();
             dto.setName(view.getName());
             dto.setSurname(view.getSurname());
@@ -68,11 +80,9 @@ public class AuthorBusinessService {
 
             dto.setBooks(bookDtos);
             dtoList.add(dto);
-        }
-
+        });
         return dtoList;
     }
-
 
     private Author buildAuthor(CreateAuthorRequest request) {
         return authorMapper.mapToEntity(request);
