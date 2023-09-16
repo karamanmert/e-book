@@ -1,6 +1,7 @@
 package com.karamanmert.ebook.service.spec;
 
 import com.karamanmert.ebook.entity.Author;
+import com.karamanmert.ebook.projection.AuthorInformationView;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface AuthorService {
     Author findByBookIsbn(String isbn);
 
     List<Author> findAll();
+
+    List<AuthorInformationView> findAllAuthorsWithBooks();
 }

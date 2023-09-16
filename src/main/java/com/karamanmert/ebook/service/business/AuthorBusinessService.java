@@ -5,13 +5,15 @@ import com.karamanmert.ebook.entity.Book;
 import com.karamanmert.ebook.mapper.AuthorMapper;
 import com.karamanmert.ebook.mapper.BookMapper;
 import com.karamanmert.ebook.model.dto.AuthorDto;
+import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
+import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author karamanmert
@@ -37,7 +39,7 @@ public class AuthorBusinessService {
         dto.setSurname(author.getSurname());
         dto.setDateOfBirth(author.getDateOfBirth());
         Optional<Book> firstBook = author.getBooks().stream().filter(book -> book.getIsbn().equals(isbn)).findFirst();
-        firstBook.ifPresent(book -> dto.setBook(bookMapper.entityToDto(book)));
+        firstBook.ifPresent(book -> dto.setBooks(Collections.singleton(bookMapper.entityToDto(book))));
         return dto;
     }
 
@@ -46,10 +48,29 @@ public class AuthorBusinessService {
         if (authors.isEmpty()) {
             return List.of();
         }
-        return authors
-                .stream()
-                .map(authorMapper::mapEntityToDto)
-                .toList();
+        return authorMapper.mapEntityToDto(authors);
+    }
+
+
+    public List<AuthorDto> findAllAuthorsWithBooks() {
+        List<AuthorInformationView> views = authorService.findAllAuthorsWithBooks();
+        List<AuthorDto> dtoList = new ArrayList<>();
+
+        for (AuthorInformationView view : views) {
+            AuthorDto dto = new AuthorDto();
+            dto.setName(view.getName());
+            dto.setSurname(view.getSurname());
+            dto.setDateOfBirth(view.getDateOfBirth());
+            Set<BookDto> bookDtos = view.getBooks()
+                                        .stream()
+                                        .map(bookMapper::entityToDto)
+                                        .collect(Collectors.toSet());
+
+            dto.setBooks(bookDtos);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
 

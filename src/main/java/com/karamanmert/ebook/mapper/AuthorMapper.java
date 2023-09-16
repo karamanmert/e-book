@@ -6,6 +6,8 @@ import com.karamanmert.ebook.model.request.CreateAuthorRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 /**
  * @author karamanmert
  */
@@ -15,4 +17,6 @@ public interface AuthorMapper {
     Author mapToEntity(CreateAuthorRequest request);
 
     AuthorDto mapEntityToDto(Author author);
+
+    List<AuthorDto> mapEntityToDto(List<Author> author);
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * @author karamanmert
@@ -27,5 +28,5 @@ public class AuthorDto {
     private LocalDate dateOfBirth;
 
     @JsonProperty("book")
-    private BookDto book;
+    private Set<BookDto> books;
 }

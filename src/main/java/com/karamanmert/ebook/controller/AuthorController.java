@@ -44,4 +44,11 @@ public class AuthorController {
         List<AuthorDto> response = authorBusinessService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/all-with-books")
+    @Operation(summary = "Get all authors with books")
+    public ResponseEntity<List<AuthorDto>> getAllWithBooks() {
+        List<AuthorDto> response = authorBusinessService.findAllAuthorsWithBooks();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
