@@ -7,8 +7,6 @@ import com.karamanmert.ebook.mapper.BookMapper;
 import com.karamanmert.ebook.model.dto.AuthorDto;
 import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
-import com.karamanmert.ebook.projection.AuthorInformationDto;
-import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,18 +42,12 @@ public class AuthorBusinessService {
         return dto;
     }
 
-    public List<AuthorDto> findAll() {
-        final List<Author> authors = authorService.findAll();
+    public List<AuthorDto> getAll() {
+        final List<Author> authors = authorService.getAll();
         if (authors.isEmpty()) {
             return List.of();
         }
         return getAuthorDtos(authors);
-    }
-
-    // first way (dto projection)
-    public List<AuthorDto> findAuthorsWithBooks() {
-        final List<AuthorInformationDto> authorInformationDtos = authorService.findAllAuthorInformationDtos();
-        return authorMapper.mapAuthorInformationDtoToAuthorDto(authorInformationDtos);
     }
 
     // second way (interface projection)
@@ -79,6 +71,8 @@ public class AuthorBusinessService {
         return dtoList;
     }
      */
+
+    // it can be done by using only one mapper.
     private List<AuthorDto> getAuthorDtos(List<Author> authors) {
         List<AuthorDto> dtos = new ArrayList<>();
         authors.forEach(author -> {

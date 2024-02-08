@@ -1,6 +1,8 @@
 package com.karamanmert.ebook.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.karamanmert.ebook.enums.BookType;
+import com.karamanmert.ebook.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,10 +29,10 @@ public class BookDto {
     private int edition;
 
     @JsonProperty("type")
-    private String type;
+    private BookType type;
 
     @JsonProperty("language")
-    private String language;
+    private Language language;
 
     @JsonProperty("author_name")
     private String authorName;

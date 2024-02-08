@@ -1,13 +1,12 @@
 package com.karamanmert.ebook.projection;
 
-import com.karamanmert.ebook.entity.Book;
+import com.karamanmert.ebook.model.dto.BookDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * @author karamanmert
@@ -22,12 +21,12 @@ public class AuthorInformationDto {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    private Set<Book> books;
+    private BookDto bookDto;
 
-    public AuthorInformationDto(String name, String surname, LocalDate dateOfBirth, Set<Book> books) {
+    public AuthorInformationDto(String name, String surname, LocalDate dateOfBirth, BookDto bookDto) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
-        this.books = books;
+        this.bookDto = bookDto;
     }
 }

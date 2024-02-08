@@ -5,6 +5,7 @@ import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.repository.BookRepository;
 import com.karamanmert.ebook.service.spec.BookService;
+import com.karamanmert.ebook.util.impl.RandomNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
+import java.util.random.RandomGeneratorFactory;
 
 /**
  * @author karamanmert
@@ -22,8 +25,6 @@ import java.util.Random;
 @Service
 @Slf4j
 public class BookServiceImpl implements BookService {
-
-    private static final int ISBN_SIZE = 13;
 
     private final BookRepository repository;
 
@@ -70,12 +71,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String generateISBN() {
-        StringBuilder isbn = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < ISBN_SIZE; i++) {
-            isbn.append(random.nextInt(10));
-        }
-        return isbn.toString();
+        return RandomNumberGenerator.generate();
     }
 
     @Override

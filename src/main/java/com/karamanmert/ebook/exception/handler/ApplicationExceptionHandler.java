@@ -4,7 +4,6 @@ import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.exception.ErrorDetail;
 import com.karamanmert.ebook.exception.ErrorResponse;
 import com.karamanmert.ebook.service.impl.MessageTranslator;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
