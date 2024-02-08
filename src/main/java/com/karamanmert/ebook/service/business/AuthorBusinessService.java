@@ -7,6 +7,7 @@ import com.karamanmert.ebook.mapper.BookMapper;
 import com.karamanmert.ebook.model.dto.AuthorDto;
 import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
+import com.karamanmert.ebook.projection.AuthorInformationDto;
 import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -48,23 +49,17 @@ public class AuthorBusinessService {
         if (authors.isEmpty()) {
             return List.of();
         }
-        List<AuthorDto> dtos = new ArrayList<>();
-        authors.forEach(author -> {
-            AuthorDto dto = new AuthorDto();
-            dto.setName(author.getName());
-            dto.setSurname(author.getSurname());
-            dto.setDateOfBirth(author.getDateOfBirth());
-            Set<BookDto> bookDtos = author.getBooks()
-                    .stream()
-                    .map(bookMapper::entityToDto)
-                    .collect(Collectors.toSet());
-            dto.setBooks(bookDtos);
-            dtos.add(dto);
-        });
-        return dtos;
+        return getAuthorDtos(authors);
     }
 
+    // first way (dto projection)
+    public List<AuthorDto> findAuthorsWithBooks() {
+        final List<AuthorInformationDto> authorInformationDtos = authorService.findAllAuthorInformationDtos();
+        return authorMapper.mapAuthorInformationDtoToAuthorDto(authorInformationDtos);
+    }
 
+    // second way (interface projection)
+    /*
     public List<AuthorDto> findAllAuthorsWithBooks() {
         final List<AuthorInformationView> views = authorService.findAllAuthorsWithBooks();
         final List<AuthorDto> dtoList = new ArrayList<>();
@@ -82,6 +77,23 @@ public class AuthorBusinessService {
             dtoList.add(dto);
         });
         return dtoList;
+    }
+     */
+    private List<AuthorDto> getAuthorDtos(List<Author> authors) {
+        List<AuthorDto> dtos = new ArrayList<>();
+        authors.forEach(author -> {
+            AuthorDto dto = new AuthorDto();
+            dto.setName(author.getName());
+            dto.setSurname(author.getSurname());
+            dto.setDateOfBirth(author.getDateOfBirth());
+            Set<BookDto> bookDtos = author.getBooks()
+                                          .stream()
+                                          .map(bookMapper::entityToDto)
+                                          .collect(Collectors.toSet());
+            dto.setBooks(bookDtos);
+            dtos.add(dto);
+        });
+        return dtos;
     }
 
     private Author buildAuthor(CreateAuthorRequest request) {

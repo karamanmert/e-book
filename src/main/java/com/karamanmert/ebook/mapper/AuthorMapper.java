@@ -3,6 +3,7 @@ package com.karamanmert.ebook.mapper;
 import com.karamanmert.ebook.entity.Author;
 import com.karamanmert.ebook.model.dto.AuthorDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
+import com.karamanmert.ebook.projection.AuthorInformationDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,5 +19,5 @@ public interface AuthorMapper {
 
     AuthorDto mapEntityToDto(Author author);
 
-    List<AuthorDto> mapEntityToDto(List<Author> author);
+    List<AuthorDto> mapAuthorInformationDtoToAuthorDto(List<AuthorInformationDto> informationDtos);
 }

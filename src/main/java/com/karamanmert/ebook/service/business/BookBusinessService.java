@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * @author karamanmert
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class BookBusinessService {
 

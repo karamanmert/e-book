@@ -3,6 +3,7 @@ package com.karamanmert.ebook.service.impl;
 import com.karamanmert.ebook.entity.Author;
 import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
+import com.karamanmert.ebook.projection.AuthorInformationDto;
 import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.repository.AuthorRepository;
 import com.karamanmert.ebook.service.spec.AuthorService;
@@ -49,5 +50,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<AuthorInformationView> findAllAuthorsWithBooks() {
         return repository.findAllAuthorsWithBooks();
+    }
+
+    @Override
+    public List<AuthorInformationDto> findAllAuthorInformationDtos() {
+        return repository.findAllAuthorInformationDtos();
     }
 }
