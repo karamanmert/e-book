@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
-import java.util.random.RandomGeneratorFactory;
+import java.util.Optional;
 
 /**
  * @author karamanmert
@@ -58,15 +56,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getById(int id) {
-        return repository
-                .findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND));
     }
 
     @Override
     public void checkBookExistsById(int id) {
-        repository.findById(id)
-                  .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND));
+        final Optional<Book> optionalBook = repository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.BOOK_NOT_FOUND);
+        }
     }
 
     @Override
@@ -76,8 +75,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getByIsbn(String isbn) {
-        return repository.findByIsbn(isbn)
-                         .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.ISBN_NOT_FOUND));
+        return repository
+                .findByIsbn(isbn)
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.ISBN_NOT_FOUND));
     }
 
     @Override

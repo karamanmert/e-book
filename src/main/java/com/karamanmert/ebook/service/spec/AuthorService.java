@@ -16,6 +16,4 @@ public interface AuthorService {
     Author findByBookIsbn(String isbn);
 
     List<Author> getAll();
-
-    // List<AuthorInformationView> findAllAuthorsWithBooks();
 }
