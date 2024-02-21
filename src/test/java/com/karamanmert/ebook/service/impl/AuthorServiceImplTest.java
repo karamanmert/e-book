@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.karamanmert.ebook.enums.ErrorCode.DUBLICATE_AUTHOR;
+import static com.karamanmert.ebook.enums.ErrorCode.AUTHOR_ALREADY_EXISTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -50,7 +50,7 @@ class AuthorServiceImplTest {
                                                  () -> authorServiceImpl.checkByNameAndSurname(anyString(), anyString()));
 
         // Then
-        assertEquals(DUBLICATE_AUTHOR, exception.getErrorCode());
+        assertEquals(AUTHOR_ALREADY_EXISTS, exception.getErrorCode());
     }
 
     @Test

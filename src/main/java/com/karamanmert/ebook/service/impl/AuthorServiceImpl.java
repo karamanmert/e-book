@@ -25,7 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void checkByNameAndSurname(String name, String surname) {
         Optional<Author> optionalAuthor = repository.findByNameAndSurname(name, surname);
         if (optionalAuthor.isPresent()) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.DUBLICATE_AUTHOR);
+            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.AUTHOR_ALREADY_EXISTS);
         }
     }
 
