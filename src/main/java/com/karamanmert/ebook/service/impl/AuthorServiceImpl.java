@@ -3,6 +3,8 @@ package com.karamanmert.ebook.service.impl;
 import com.karamanmert.ebook.entity.Author;
 import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
+import com.karamanmert.ebook.model.dto.AuthorDto;
+import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.repository.AuthorRepository;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +43,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> getAll() {
-        return repository.findAll();
+    public List<AuthorDto> getAllAuthors() {
+        return repository.findAllAuthors();
     }
 
-    //@Override
-   //public List<AuthorInformationView> findAllAuthorsWithBooks() {
-   //    return repository.findAllAuthorsWithBooks();
-   //}
+    @Override
+    public List<AuthorInformationView> getAllAuthorsWithBooks() {
+        return repository.findAllAuthorsWithBooks();
+    }
 }

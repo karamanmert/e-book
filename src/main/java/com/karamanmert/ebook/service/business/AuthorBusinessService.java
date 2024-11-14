@@ -5,13 +5,18 @@ import com.karamanmert.ebook.entity.Book;
 import com.karamanmert.ebook.mapper.AuthorMapper;
 import com.karamanmert.ebook.mapper.BookMapper;
 import com.karamanmert.ebook.model.dto.AuthorDto;
+import com.karamanmert.ebook.model.dto.AuthorWithBooksDto;
 import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
+import com.karamanmert.ebook.model.response.AuthorWithBooksResponse;
+import com.karamanmert.ebook.projection.AuthorBookNamePairDto;
+import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.service.spec.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -31,9 +36,9 @@ public class AuthorBusinessService {
         authorService.save(author);
     }
 
-    public AuthorDto findByBookIsbn(String isbn) {
+    public AuthorWithBooksDto findByBookIsbn(String isbn) {
         final Author author = authorService.findByBookIsbn(isbn);
-        final AuthorDto dto = new AuthorDto();
+        final AuthorWithBooksDto dto = new AuthorWithBooksDto();
         dto.setName(author.getName());
         dto.setSurname(author.getSurname());
         dto.setDateOfBirth(author.getDateOfBirth());
@@ -42,52 +47,43 @@ public class AuthorBusinessService {
         return dto;
     }
 
+    // (interface projection)
+    public List<AuthorWithBooksResponse> getAllWithBooks() {
+        final List<AuthorInformationView> allAuthorsWithBooks = authorService.getAllAuthorsWithBooks();
+
+        final Map<String, AuthorWithBooksResponse> authorBooksMap = allAuthorsWithBooks.stream()
+                .collect(getAuthorInformationViewMapCollector());
+
+        return new ArrayList<>(authorBooksMap.values());
+    }
+
     public List<AuthorDto> getAll() {
-        final List<Author> authors = authorService.getAll();
-        if (authors.isEmpty()) {
-            return List.of();
-        }
-        return getAuthorDtos(authors);
+        return authorService.getAllAuthors();
     }
 
-    // second way (interface projection)
-    /*
-    public List<AuthorDto> findAllAuthorsWithBooks() {
-        final List<AuthorInformationView> views = authorService.findAllAuthorsWithBooks();
-        final List<AuthorDto> dtoList = new ArrayList<>();
-        views.forEach(view -> {
-            AuthorDto dto = new AuthorDto();
-            dto.setName(view.getName());
-            dto.setSurname(view.getSurname());
-            dto.setDateOfBirth(view.getDateOfBirth());
-            Set<BookDto> bookDtos = view.getBooks()
-                                        .stream()
-                                        .map(bookMapper::entityToDto)
-                                        .collect(Collectors.toSet());
-
-            dto.setBooks(bookDtos);
-            dtoList.add(dto);
-        });
-        return dtoList;
+    private Collector<AuthorInformationView, ?, Map<String, AuthorWithBooksResponse>> getAuthorInformationViewMapCollector() {
+        return Collectors.groupingBy(
+                author -> author.getName() + " " + author.getSurname(),
+                Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        authorInfoList -> {
+                            AuthorInformationView first = authorInfoList.get(0);
+                            Set<String> books = authorInfoList.stream()
+                                    .map(AuthorInformationView::getBookName)
+                                    .collect(Collectors.toSet());
+                            return getAuthorWithBooksResponse(first, books);
+                        }
+                )
+        );
     }
-     */
 
-    // it can be done by using only one mapper.
-    private List<AuthorDto> getAuthorDtos(List<Author> authors) {
-        List<AuthorDto> dtos = new ArrayList<>();
-        authors.forEach(author -> {
-            AuthorDto dto = new AuthorDto();
-            dto.setName(author.getName());
-            dto.setSurname(author.getSurname());
-            dto.setDateOfBirth(author.getDateOfBirth());
-            Set<BookDto> bookDtos = author.getBooks()
-                                          .stream()
-                                          .map(bookMapper::entityToDto)
-                                          .collect(Collectors.toSet());
-            dto.setBooks(bookDtos);
-            dtos.add(dto);
-        });
-        return dtos;
+    private AuthorWithBooksResponse getAuthorWithBooksResponse(AuthorInformationView first, Set<String> books) {
+        AuthorWithBooksResponse response = new AuthorWithBooksResponse();
+        response.setName(first.getName());
+        response.setSurname(first.getSurname());
+        response.setDateOfBirth(first.getDateOfBirth());
+        response.setBookName(books);
+        return response;
     }
 
     private Author buildAuthor(CreateAuthorRequest request) {

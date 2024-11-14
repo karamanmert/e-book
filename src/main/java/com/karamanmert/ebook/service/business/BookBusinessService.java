@@ -63,8 +63,8 @@ public class BookBusinessService {
     }
 
 
-    public Page<BookDto> getAllPaginatedBooks(int page, int pageSize) {
-        final PageRequest pageRequest = PageRequest.of(page, pageSize);
+    public Page<BookDto> getAllPaginatedBooks(com.karamanmert.ebook.model.request.PageRequest request) {
+        final PageRequest pageRequest = PageRequest.of(request.getPage(), request.getPageSize());
         final Page<Book> paginatedBooks = service.getPaginatedBooks(pageRequest);
         return paginatedBooks.map(this.bookMapper::entityToDto);
 
