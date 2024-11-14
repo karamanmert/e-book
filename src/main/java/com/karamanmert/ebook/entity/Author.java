@@ -3,6 +3,7 @@ package com.karamanmert.ebook.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class Author {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Book> books;
 }

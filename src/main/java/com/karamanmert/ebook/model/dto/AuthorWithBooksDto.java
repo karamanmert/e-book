@@ -2,29 +2,23 @@ package com.karamanmert.ebook.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 /**
  * @author karamanmert
  */
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorDto {
+public class AuthorWithBooksDto extends AuthorDto {
 
-    @JsonProperty("name")
-    private String name;
-
-    @JsonProperty("surname")
-    private String surname;
-
-    @JsonProperty("date_of_birth")
-    private LocalDate dateOfBirth;
+    @JsonProperty("book")
+    private Set<BookDto> books;
 }

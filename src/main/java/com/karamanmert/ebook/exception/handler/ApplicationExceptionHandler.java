@@ -1,9 +1,11 @@
 package com.karamanmert.ebook.exception.handler;
 
+import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
 import com.karamanmert.ebook.exception.ErrorDetail;
 import com.karamanmert.ebook.exception.ErrorResponse;
 import com.karamanmert.ebook.service.impl.MessageTranslator;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,5 +53,21 @@ public class ApplicationExceptionHandler {
             errorMap.put(fieldName, errorMessage);
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+
+        final ArrayList<ErrorDetail> errorDetails = new ArrayList<>();
+        ex.getConstraintViolations()
+                .forEach(constraintViolation -> {
+                    ErrorDetail errorDetail = new ErrorDetail();
+                    errorDetail.setErrorCode(ErrorCode.toEnum(constraintViolation.getMessage()));
+                    errorDetail.setMessage(messageTranslator.getMessage(errorPrefix + constraintViolation.getMessage()));
+                    errorDetails.add(errorDetail);
+                });
+        ErrorResponse response = new ErrorResponse();
+        response.setErrors(errorDetails);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

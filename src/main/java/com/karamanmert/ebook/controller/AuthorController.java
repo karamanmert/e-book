@@ -1,7 +1,9 @@
 package com.karamanmert.ebook.controller;
 
 import com.karamanmert.ebook.model.dto.AuthorDto;
+import com.karamanmert.ebook.model.dto.AuthorWithBooksDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
+import com.karamanmert.ebook.model.response.AuthorWithBooksResponse;
 import com.karamanmert.ebook.service.business.AuthorBusinessService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -32,14 +34,21 @@ public class AuthorController {
 
     @GetMapping("{isbn}")
     @Operation(summary = "Get author by isbn")
-    public ResponseEntity<AuthorDto> getByBookIsbn(
+    public ResponseEntity<AuthorWithBooksDto> getByBookIsbn(
             @Valid @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "isbn") String isbn) {
-        AuthorDto response = authorBusinessService.findByBookIsbn(isbn);
+        AuthorWithBooksDto response = authorBusinessService.findByBookIsbn(isbn);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/all-with-books")
+    @Operation(summary = "Get all authors with books")
+    public ResponseEntity<List<AuthorWithBooksResponse>> getAllWithBooks() {
+        List<AuthorWithBooksResponse> response = authorBusinessService.getAllWithBooks();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/all")
-    @Operation(summary = "Get all authors with books")
+    @Operation(summary = "Get all authors without books")
     public ResponseEntity<List<AuthorDto>> getAll() {
         List<AuthorDto> response = authorBusinessService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(response);

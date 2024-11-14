@@ -3,13 +3,18 @@ package com.karamanmert.ebook.service.impl;
 import com.karamanmert.ebook.entity.Author;
 import com.karamanmert.ebook.enums.ErrorCode;
 import com.karamanmert.ebook.exception.ApiException;
+import com.karamanmert.ebook.model.dto.AuthorDto;
+import com.karamanmert.ebook.projection.AuthorInformationView;
 import com.karamanmert.ebook.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.karamanmert.ebook.enums.ErrorCode.AUTHOR_ALREADY_EXISTS;
@@ -89,5 +94,52 @@ class AuthorServiceImplTest {
         // Then
         verify(repository).findByBookIsbn(anyString());
         assertEquals(ErrorCode.ISBN_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    void shouldGetAllAuthors() {
+        // Given
+        AuthorDto authorDto = new AuthorDto();
+        AuthorDto authorDto2 = new AuthorDto();
+        List<AuthorDto> expected = List.of(authorDto, authorDto2);
+        when(repository.findAllAuthors()).thenReturn(expected);
+
+        // When
+        List<AuthorDto> allAuthors = authorServiceImpl.getAllAuthors();
+
+        // Then
+        verify(repository).findAllAuthors();
+        assertEquals(expected.size(), allAuthors.size());
+    }
+
+    @Test
+    void shouldGetAllAuthorsWithBooks() {
+        // Given
+        AuthorInformationView authorInformationView = getAuthorInformationView();
+        List<AuthorInformationView> expected = List.of(authorInformationView);
+        when(repository.findAllAuthorsWithBooks()).thenReturn(expected);
+
+        // When
+        List<AuthorInformationView> response = repository.findAllAuthorsWithBooks();
+
+        // Then
+        verify(repository).findAllAuthorsWithBooks();
+        assertEquals(expected.get(0).getName(), response.get(0).getName());
+        assertEquals(expected.get(0).getSurname(), response.get(0).getSurname());
+        assertEquals(expected.get(0).getDateOfBirth(), response.get(0).getDateOfBirth());
+        assertEquals(expected.get(0).getBookName(), response.get(0).getBookName());
+    }
+
+    private AuthorInformationView getAuthorInformationView() {
+        // Create a mock for AuthorInformationView
+        AuthorInformationView authorInformationView = Mockito.mock(AuthorInformationView.class);
+
+        // Set up mock behavior
+        Mockito.when(authorInformationView.getName()).thenReturn("John");
+        Mockito.when(authorInformationView.getSurname()).thenReturn("Doe");
+        Mockito.when(authorInformationView.getDateOfBirth()).thenReturn(LocalDate.of(1985, 5, 15));
+        Mockito.when(authorInformationView.getBookName()).thenReturn("Sample Book");
+
+        return authorInformationView;
     }
 }

@@ -2,6 +2,7 @@ package com.karamanmert.ebook.controller;
 
 import com.karamanmert.ebook.model.dto.BookDto;
 import com.karamanmert.ebook.model.request.CreateBookRequest;
+import com.karamanmert.ebook.model.request.PageRequest;
 import com.karamanmert.ebook.model.request.UpdateBookRequest;
 import com.karamanmert.ebook.service.business.BookBusinessService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,8 +73,8 @@ public class BookController {
 
     @GetMapping("/paginate")
     @Operation(summary = "Get paginated books")
-    public ResponseEntity<Page<BookDto>> getPaginatedBooks(@RequestParam Integer page, @RequestParam Integer pageSize) {
-        Page<BookDto> books = businessService.getAllPaginatedBooks(page, pageSize);
+    public ResponseEntity<Page<BookDto>> getPaginatedBooks(@Valid PageRequest request) {
+        Page<BookDto> books = businessService.getAllPaginatedBooks(request);
         return ResponseEntity.status(HttpStatus.OK).body(books);
     }
 }
