@@ -56,7 +56,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
 
         final ArrayList<ErrorDetail> errorDetails = new ArrayList<>();
         ex.getConstraintViolations()

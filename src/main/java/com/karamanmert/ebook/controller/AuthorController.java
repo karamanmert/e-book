@@ -8,9 +8,11 @@ import com.karamanmert.ebook.service.business.AuthorBusinessService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/authors")
 @RequiredArgsConstructor
+@Validated
 public class AuthorController {
 
     private final AuthorBusinessService authorBusinessService;
@@ -35,7 +38,9 @@ public class AuthorController {
     @GetMapping("{isbn}")
     @Operation(summary = "Get author by isbn")
     public ResponseEntity<AuthorWithBooksDto> getByBookIsbn(
-            @Valid @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "isbn") String isbn) {
+            @NotBlank(message = "PARAMETER_REQUIRED")
+            @Size(min = 13, max = 13, message = "INVALID_PARAMETER_LENGTH")
+            @PathVariable(value = "isbn") String isbn) {
         AuthorWithBooksDto response = authorBusinessService.findByBookIsbn(isbn);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
