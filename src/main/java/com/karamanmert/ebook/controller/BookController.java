@@ -8,10 +8,12 @@ import com.karamanmert.ebook.service.business.BookBusinessService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
+@Validated
 public class BookController {
 
     private final BookBusinessService businessService;
@@ -36,7 +39,9 @@ public class BookController {
     @GetMapping
     @Operation(summary = "Get book by name")
     public ResponseEntity<BookDto> getByName(
-            @Valid @NotBlank(message = "PARAMETER_REQUIRED") @RequestParam(value = "name") String name) {
+            @NotBlank(message = "PARAMETER_REQUIRED")
+            @Size(min = 2, max = 50, message = "INVALID_PARAMETER_LENGTH")
+            @RequestParam("name") String name) {
         BookDto bookDto = businessService.getByName(name);
         return ResponseEntity.status(HttpStatus.OK).body(bookDto);
     }
@@ -44,7 +49,9 @@ public class BookController {
     @GetMapping("{isbn}")
     @Operation(summary = "Get book by ISBN")
     public ResponseEntity<BookDto> getByIsbn(
-            @Valid @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "isbn") String isbn) {
+            @NotBlank(message = "PARAMETER_REQUIRED")
+            @Size(min = 13, max = 13, message = "INVALID_PARAMETER_LENGTH")
+            @PathVariable(value = "isbn") String isbn) {
         BookDto response = businessService.getByIsbn(isbn);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -56,10 +63,11 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // todo: do this with isbn id is not ok. than add size check
     @DeleteMapping("{id}")
     @Operation(summary = "Delete book by id")
     public ResponseEntity<Void> deleteById(
-            @Valid @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "id") Integer id) {
+            @NotBlank(message = "PARAMETER_REQUIRED") @PathVariable(value = "id") Integer id) {
         businessService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
