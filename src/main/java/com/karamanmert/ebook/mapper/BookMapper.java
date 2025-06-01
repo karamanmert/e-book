@@ -7,14 +7,15 @@ import com.karamanmert.ebook.model.request.UpdateBookRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
 /**
  * @author karamanmert
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BookMapper {
-    @Mapping(target = "author.id", source = "request.authorId")
-    @Mapping(target = "language", source = "request.language")
+    @Mapping(target = "author.id", source = "authorId")
+    @Mapping(target = "language", source = "language")
     Book requestToEntity(CreateBookRequest request);
 
     @Mapping(target = "authorName", expression = "java(book.getAuthor().getName() + ' ' + book.getAuthor().getSurname())")

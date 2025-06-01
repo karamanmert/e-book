@@ -24,11 +24,12 @@ public class ApplicationConfig {
     @Bean
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver acceptHeaderLocaleResolver = new AcceptHeaderLocaleResolver();
-        acceptHeaderLocaleResolver.setDefaultLocale(new Locale(defaultLanguage));
-        List<Locale> supportedLocales = Arrays.asList(new Locale("tr"), new Locale("en"));
+        acceptHeaderLocaleResolver.setDefaultLocale(Locale.forLanguageTag(defaultLanguage));
+        List<Locale> supportedLocales = Arrays.asList(Locale.forLanguageTag("tr"), Locale.forLanguageTag("en"));
         acceptHeaderLocaleResolver.setSupportedLocales(supportedLocales);
         return acceptHeaderLocaleResolver;
     }
+
 
     @Bean
     public MessageSource messageSource() {

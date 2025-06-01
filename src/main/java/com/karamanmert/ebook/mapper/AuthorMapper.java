@@ -6,13 +6,14 @@ import com.karamanmert.ebook.model.dto.AuthorWithBooksDto;
 import com.karamanmert.ebook.model.request.CreateAuthorRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
 /**
  * @author karamanmert
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AuthorMapper {
 
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
