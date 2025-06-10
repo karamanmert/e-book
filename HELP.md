@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.karamanmert.e-book' is invalid and this project uses 'com.karamanmert.ebook' instead.
+* The original package name 'com.karamanmert.e-book' is invalid and this project uses 'com.karamanmert.book' instead.
 
 # Getting Started
 
